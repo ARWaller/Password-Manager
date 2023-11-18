@@ -7,7 +7,7 @@ public class DatabaseSQLiteController {
     
 }
 
-// Database operations for storing username and encrypted password
+// 1. Database operations for storing username and encrypted password
 
 import java.sql.Connection;
 import java.sql.DriverManager;
