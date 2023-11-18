@@ -1,0 +1,4 @@
+com\mycompany\passwordmanager\App.class
+com\mycompany\passwordmanager\Algorithms.class
+com\mycompany\passwordmanager\DatabaseSQLiteController.class
+com\mycompany\passwordmanager\Accounts.class
