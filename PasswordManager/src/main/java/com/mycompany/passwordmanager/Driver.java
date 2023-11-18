@@ -1,4 +1,4 @@
-//(Add username and password, encrypt, store in database) Driver for taking in username and password, encrypting password, and loading in database. 
+// 1. (Add username and password, encrypt, store in database) Driver for taking in username and password, encrypting password, and loading in database. 
 
 import java.io.Console;
 
