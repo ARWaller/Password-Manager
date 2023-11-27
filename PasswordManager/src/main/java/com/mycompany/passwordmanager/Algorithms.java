@@ -51,7 +51,8 @@ public class EncryptionUtil {
      * @param salt         The salt that will added on to the hash
      * @return 
      */
-    private static String hashPassword(String password, byte[] salt) {
+    private static String hashPassword(String password) {
+        byte[] salt = generateSalt();
         try {
             MessageDigest digest = MessageDigest.getInstance("SHA-256");
 
