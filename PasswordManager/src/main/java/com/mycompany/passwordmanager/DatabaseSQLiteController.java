@@ -19,7 +19,7 @@ public class DatabaseManager {
      */
 public static void insertPassword(String username, String password) throws SQLException{
         try(Connection conn = DriverManager.getConnection(URL)){
-            PreparedStatement stmt = conn.prepareStatement("INSERT INTO Accounts(username, password,type) VALUES (?,?)");
+            PreparedStatement stmt = conn.prepareStatement("INSERT INTO Accounts(username, password) VALUES (?,?)");
             stmt.setString(1, username);
             stmt.setString(2, password);
             stmt.executeUpdate();
