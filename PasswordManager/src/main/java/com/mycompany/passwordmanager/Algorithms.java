@@ -12,6 +12,10 @@ import java.util.Base64;
 public class EncryptionUtil {
     private static final String ALGORITHM = "AES";
     private static SecretKey secretKey;
+    private static final String UPPERCASE_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";//all uppercase letters
+    private static final String LOWERCASE_CHARS = "abcdefghijklmnopqrstuvwxyz";//all lowercase
+    private static final String NUMBERS = "0123456789";
+    private static final String SPECIAL_CHARS = "!@#$%^&*()-_=+[]{}|;:'\",.<>/?";//all symbols
 
     /**
      * Initializes the secret key for encryption.
@@ -36,7 +40,7 @@ public class EncryptionUtil {
         return Base64.getEncoder().encodeToString(encryptedByte);
     }
 
-    //This method generates a random salt
+    //This method generates a random salt, works with hashPassword method
     private static byte[] generateSalt() {
         SecureRandom random = new SecureRandom();
         byte[] salt = new byte[16];
@@ -71,11 +75,32 @@ public class EncryptionUtil {
         }
     }
 
-    //used to conactenate password array with salt array
+    //used to conactenate password array with salt array, works with hasPassword method
     private static byte[] concatenateArrays(byte[] array1, byte[] array2) {
         byte[] result = new byte[array1.length + array2.length];
         System.arraycopy(array1, 0, result, 0, array1.length);
         System.arraycopy(array2, 0, result, array1.length, array2.length);
         return result;
+    }
+
+    public static String generatePassword() {
+        // Combine all possible characters
+        String allChars = UPPERCASE_CHARS + LOWERCASE_CHARS + NUMBERS + SPECIAL_CHARS;
+
+        // Use a secure rng
+        SecureRandom random = new SecureRandom();
+
+        // StringBuilder to store the newly generated password
+        StringBuilder passwordBuilder = new StringBuilder();
+
+        // Generate the password by randomly selecting characters
+        for (int i = 0; i < 12; i++) {
+            int randomIndex = random.nextInt(allChars.length());
+            char randomChar = allChars.charAt(randomIndex);
+            passwordBuilder.append(randomChar);
+        }
+
+        //return generated hashed password
+        return hashPassword(passwordBuilder.toString());
     }
 }
