@@ -57,7 +57,7 @@ public class Algorithms {
         return result;
     }
      
-    public static String generatePassword(String salt) {
+    public static String generatePassword() {
         // Combine all possible characters
         String allChars = UPPERCASE_CHARS + LOWERCASE_CHARS + NUMBERS + SPECIAL_CHARS;
 
@@ -74,8 +74,7 @@ public class Algorithms {
             passwordBuilder.append(randomChar);
         }
 
-        //return generated hashed password
-        return hashPassword(passwordBuilder.toString(),salt);
+        return passwordBuilder.toString();
     }
    
     /**
@@ -142,5 +141,3 @@ public class Algorithms {
 }
 
 }
-
-
