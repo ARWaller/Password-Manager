@@ -1,27 +1,25 @@
-
+//@author Anthony Waller
+//This class represents the controller for SQLite database
 package com.mycompany.passwordmanager;
-
-// 1. Database operations for storing username and encrypted password
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
+import java.util.Arrays;
 
-public class DatabaseManager {
+public class DatabaseSQLiteController {
+    //URL to database file
     private static final String URL = "jdbc:sqlite:src/main/resources/com/mycompany/passwordmanager/Accounts.db";
     
-    /**
-     * Inserts a new record into the user_passwords table.
-     *
-     * @param username           The username associated with the password.
-     * @param password  The encrypted password to store.
-     */
-public static void insertPassword(String username, String password) throws SQLException{
+    public static void insertPassword(String type, String username, String password) throws SQLException, Exception{
         try(Connection conn = DriverManager.getConnection(URL)){
-            PreparedStatement stmt = conn.prepareStatement("INSERT INTO Accounts(username, password) VALUES (?,?)");
-            stmt.setString(1, username);
-            stmt.setString(2, password);
+            PreparedStatement stmt = conn.prepareStatement("INSERT INTO Accounts(Type,Username,Password) VALUES (?, ?, ?)");
+            stmt.setString(1, type);
+            stmt.setString(2, username);
+            stmt.setString(3, Algorithms.encrypt(password));
             stmt.executeUpdate();
     } catch (SQLException e){
         e.printStackTrace();
@@ -61,5 +59,31 @@ public static void insertPassword(String username, String password) throws SQLEx
         
         }
     }
+    
+public static boolean verifyMasterPassword(String password) {
+    String passwordHash = null;
+    String stored_salt = null;
+    try (Connection conn = DriverManager.getConnection(URL)) {
+        PreparedStatement stmt = conn.prepareStatement("SELECT * FROM Credentials");
+        ResultSet resultSet = stmt.executeQuery();
+
+        while (resultSet.next()) {
+            
+            passwordHash = resultSet.getString("Password");
+            stored_salt = resultSet.getString("Salt");
+
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+    String entered_password = Algorithms.hashPassword(password,stored_salt);
+    
+    //debug statements
+    //System.out.println("Hashed Password: " + entered_password);
+    //System.out.println("Stored Password: "+ passwordHash);
+    //System.out.println(stored_salt);
+    return passwordHash.equals(entered_password);
 }
 
+}
+        
