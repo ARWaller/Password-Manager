@@ -106,22 +106,23 @@ public class Main {
         button1.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(frame, "Option 1 selected");
-                SwingUtilities.invokeLater(() -> InsertPasswordGUI());
+                //JOptionPane.showMessageDialog(frame, "Option 1 selected");
+                SwingUtilities.invokeLater(() -> insertPasswordGUI());
             }
         });
 
         button2.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(frame, "Option 2 selected");
+                //JOptionPane.showMessageDialog(frame, "Option 2 selected");
             }
         });
 
         button3.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(frame, "Option 3 selected");
+                //JOptionPane.showMessageDialog(frame, "Option 3 selected");
+                SwingUtilities.invokeLater(() -> createPasswordGUI());
             }
         });
         
@@ -153,7 +154,7 @@ public class Main {
     }
 
     //represents option 1 insert passsword
-    private static void InsertPasswordGUI() {
+    private static void insertPasswordGUI() {
         JFrame frame = new JFrame("Insert Password");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -219,4 +220,68 @@ public class Main {
         frame.setSize(400, 200);
         frame.setVisible(true);
     }
+    
+    private static void createPasswordGUI() {
+        JFrame frame = new JFrame("Generate Password");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        JPanel panel = new JPanel(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+
+        JLabel typeLabel = new JLabel("Type: ");
+        JTextField typeField = new JTextField(20);
+
+        JLabel usernameLabel = new JLabel("Username: ");
+        JTextField usernameField = new JTextField(20);
+
+        JButton submitButton = new JButton("Submit");
+
+        submitButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String type = typeField.getText();
+                String username = usernameField.getText();
+
+                try {
+                    DatabaseSQLiteController.insertPassword(type, username, Algorithms.generatePassword());
+                } catch (Exception ex) {
+                    Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                System.out.println("Type: " + type);
+                System.out.println("Username: " + username);
+                System.out.println("Password Generated Successfully!");
+                frame.dispose();
+            }
+        });
+
+        // Type Label and Field
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.insets = new Insets(10, 10, 10, 10);
+        gbc.anchor = GridBagConstraints.WEST;
+        panel.add(typeLabel, gbc);
+
+        gbc.gridx = 1;
+        panel.add(typeField, gbc);
+
+        // Username Label and Field
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        panel.add(usernameLabel, gbc);
+
+        gbc.gridx = 1;
+        panel.add(usernameField, gbc);
+
+        // Submit Button
+        gbc.gridx = 0;
+        gbc.gridy = 2;
+        gbc.gridwidth = 2;
+        gbc.anchor = GridBagConstraints.CENTER;
+        panel.add(submitButton, gbc);
+
+        frame.getContentPane().add(panel);
+        frame.setSize(400, 300);
+        frame.setVisible(true);
+    }
+
 }
